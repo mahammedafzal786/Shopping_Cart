@@ -17,23 +17,27 @@ import lombok.Setter;
 @Entity
 public class Product {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	@Column(length = 500)
-	private String title;
-	
-	@Column(length = 5000)
-	private String description;
-	
-	private String category;
-	
-	private String image;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private Double price;
+    @Column(length = 500)
+    private String title;
 
-	private int stock;
+    @Column(length = 5000)
+    private String description;
+
+    private String category;
+
+    private String image;
+
+    private Double price;
+
+    private int stock;
+
+    private int discount;
+
+    private double discountPrice;
 
 	public int getId() {
 		return id;
@@ -90,7 +94,24 @@ public class Product {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	
-	
 
+	public int getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+
+	public double getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(double discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
+    
+    
+    
 }
