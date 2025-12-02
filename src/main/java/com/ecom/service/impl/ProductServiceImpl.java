@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.repository.ProductRepository;
 import com.ecom.service.ProductService;
@@ -69,6 +70,7 @@ public class ProductServiceImpl implements ProductService{
 		dbProduct.setPrice(product.getPrice());
 		dbProduct.setStock(product.getStock());
 		dbProduct.setImage(imageName);
+		dbProduct.setIsActive(product.getIsActive());
 		
 		dbProduct.setDiscount(product.getDiscount());
 		
@@ -104,6 +106,22 @@ public class ProductServiceImpl implements ProductService{
 		}
 		
 		return null;
+	}
+
+	@Override
+	public List<Product> getAllActiveProducts(String category) {
+		
+		List<Product> products = null;
+				
+		if(ObjectUtils.isEmpty(category)) {	
+			
+			products = productRepository.findByIsActiveTrue();
+				
+		}else {
+			products = productRepository.findAllByCategory(category);
+		}		
+		
+		return products;
 	}
 
 }
