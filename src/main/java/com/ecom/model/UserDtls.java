@@ -50,6 +50,8 @@ public class UserDtls {
 	private Integer failedAttempt;
 	
 	private Date lockTime;
+	
+	private String resetToken;
 
 	public Integer getId() {
 		return id;
@@ -169,6 +171,14 @@ public class UserDtls {
 
 	public void setLockTime(Date lockTime) {
 		this.lockTime = lockTime;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
 	}
 	
 	

@@ -2,12 +2,14 @@ package com.ecom.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -27,7 +29,10 @@ import com.ecom.model.UserDtls;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
+import com.ecom.util.CommonUtil;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -42,6 +47,9 @@ public class HomeController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 	
 	
 	@ModelAttribute
@@ -142,5 +150,49 @@ public class HomeController {
 		return "redirect:/register";
 	}
 	
+	
+	//forgot password
+	
+	@GetMapping("/forgot-password")
+	public String forgotPassword() {
+		
+		
+		return "forgot_password";
+	}
+	
+	@PostMapping("/forgot-password")
+	public String processforgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		
+		UserDtls userByEmail = userService.getUserByEmail(email);
+		
+		if(ObjectUtils.isEmpty(userByEmail)) {
+			
+			session.setAttribute("errorMsg", "Invalid email !");
+		}else {
+			
+			String resetToken = UUID.randomUUID().toString();
+			
+			userService.updateUserResetToken(email,resetToken);
+			
+			String url = CommonUtil.generateUrl(request)+"/reset-password?token="+resetToken;
+			
+			Boolean sendMail = commonUtil.sendMail(url,email);
+			
+			if (sendMail) {
+				session.setAttribute("succMsg", "Please check your mail..Password reset link is send.");
+			} else {
+				session.setAttribute("errorMsg", "something wrong on server ! Mail not send.");
+			}
+		}
+		
+		return "redirect:/forgot-password";
+	}
+	
+	@GetMapping("/reset-password")
+	public String resetPassword() {
+		
+		
+		return "reset_password";
+	}
 	
 }
