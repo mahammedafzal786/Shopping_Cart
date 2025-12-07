@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -50,6 +51,9 @@ public class HomeController {
 	
 	@Autowired
 	private CommonUtil commonUtil;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 	@ModelAttribute
@@ -189,10 +193,37 @@ public class HomeController {
 	}
 	
 	@GetMapping("/reset-password")
-	public String resetPassword() {
+	public String showResetPassword(@RequestParam String token,HttpSession session,Model m) {
 		
+		UserDtls userByToken = userService.getUserByToken(token);
+		
+		if(userByToken==null) { 
+			m.addAttribute("msg", "Your link is invalid or expired !");
+			return "message";
+		}
+		
+		m.addAttribute("token", token);
 		
 		return "reset_password";
+	}
+	
+	@PostMapping("/reset-password")
+	public String ResetPassword(@RequestParam String token,@RequestParam String password,HttpSession session,Model m) {
+		
+		UserDtls userByToken = userService.getUserByToken(token);
+		
+		if(userByToken==null) { 
+			m.addAttribute("msg", "Your link is invalid or expired !");
+			return "message";
+		}else {
+			userByToken.setPassword(passwordEncoder.encode(password));
+			userByToken.setResetToken(null);
+			userService.updateUser(userByToken);
+			m.addAttribute("msg", "Password chnged successfully !");
+			return "message";
+		}
+		
+		
 	}
 	
 }
