@@ -33,6 +33,9 @@ public class Cart {
 	
 	@Transient
 	private double totalPrice;
+	
+	@Transient
+	private double totalOrderPrice;
 
 	public int getId() {
 		return id;
@@ -72,6 +75,14 @@ public class Cart {
 
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public double getTotalOrderPrice() {
+		return totalOrderPrice;
+	}
+
+	public void setTotalOrderPrice(double totalOrderPrice) {
+		this.totalOrderPrice = totalOrderPrice;
 	}
 	
 	

@@ -24,55 +24,85 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	@Autowired
 	private CartService cartService;
-	
-	
+
 	@ModelAttribute
-	public void getUserDetails(Principal p,Model m) {
-		
-		if(p!=null) {
+	public void getUserDetails(Principal p, Model m) {
+
+		if (p != null) {
 			String email = p.getName();
-			
+
 			UserDtls userDtls = userService.getUserByEmail(email);
-			
+
 			m.addAttribute("user", userDtls);
+
+			Integer countCart = cartService.getCountCart(userDtls.getId());
+			m.addAttribute("countCart", countCart);
 		}
-		
-		List <Category> allActiveCategory = categoryService.getAllActiveCategory();
+
+		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("category", allActiveCategory);
-		
-		
+
 	}
 
 	@GetMapping("/")
 	public String home() {
-		
+
 		return "user/home";
 	}
-	
-	
+
 	@GetMapping("/addCart")
-	public String addToCart(@RequestParam Integer pid,@RequestParam Integer uid,HttpSession session) {
-		
+	public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid, HttpSession session) {
+
 		Cart saveCart = cartService.saveCart(pid, uid);
-		
-		if(ObjectUtils.isEmpty(saveCart)) {
+
+		if (ObjectUtils.isEmpty(saveCart)) {
 			session.setAttribute("errorMsg", "Product add to cart failed !");
-		}else {
+		} else {
 
 			session.setAttribute("succMsg", "Product added to cart successfully !");
 		}
-		
+
 		return "redirect:/product/" + pid;
 	}
 
+	@GetMapping("/cart")
+	public String loadCartPage(Principal p, Model m) {
+
+		UserDtls user = getLoggedInUserDetails(p);
+
+		List<Cart> carts = cartService.getCartsByUser(user.getId());
+		m.addAttribute("carts", carts);
+		if (carts.size() > 0) {
+			double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+			m.addAttribute("totalOrderPrice", totalOrderPrice);
+		}
+
+		return "/user/cart";
+	}
+
+	@GetMapping("/cartQuantityUpdate")
+	public String updateCartQuantity(@RequestParam String sy, @RequestParam Integer cid) {
+
+		cartService.updateQuantity(sy, cid);
+
+		return "redirect:/user/cart";
+	}
+
+	private UserDtls getLoggedInUserDetails(Principal p) {
+
+		String email = p.getName();
+
+		UserDtls userDtls = userService.getUserByEmail(email);
+
+		return userDtls;
+	}
 }
