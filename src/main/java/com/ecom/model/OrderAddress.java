@@ -1,7 +1,5 @@
 package com.ecom.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,23 +9,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class UserDtls {
-
+public class OrderAddress {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 	
-	private String name;
+	private String firstName;
 	
-	private String mobileNumber;
+	private String lastName;
 	
 	private String email;
+	
+	private String mobileNo;
 	
 	private String address;
 	
@@ -36,22 +36,6 @@ public class UserDtls {
 	private String state;
 	
 	private String pincode;
-	
-	private String password; 
-	
-	private String profileImage;
-	
-	private String role;
-	
-	private Boolean isEnabled;
-	
-	private Boolean AccountNonLocked;
-	
-	private Integer failedAttempt;
-	
-	private Date lockTime;
-	
-	private String resetToken;
 
 		
 	

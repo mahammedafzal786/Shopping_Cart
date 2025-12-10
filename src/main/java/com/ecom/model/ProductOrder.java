@@ -2,10 +2,13 @@ package com.ecom.model;
 
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,42 +19,32 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class UserDtls {
-
+public class ProductOrder {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 	
-	private String name;
+	private String orderId;
 	
-	private String mobileNumber;
+	private Date orderDate;
 	
-	private String email;
+	@ManyToOne
+	private Product product;
 	
-	private String address;
+	private Double price;
 	
-	private String city;
+	private Integer quantity;
 	
-	private String state;
+	@ManyToOne
+	private UserDtls user;
 	
-	private String pincode;
+	private String status;
 	
-	private String password; 
+	private String paymentType;
 	
-	private String profileImage;
-	
-	private String role;
-	
-	private Boolean isEnabled;
-	
-	private Boolean AccountNonLocked;
-	
-	private Integer failedAttempt;
-	
-	private Date lockTime;
-	
-	private String resetToken;
+	@OneToOne(cascade = CascadeType.ALL)
+	private OrderAddress orderAddress;
 
 		
 	

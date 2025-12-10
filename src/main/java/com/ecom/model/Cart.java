@@ -37,54 +37,7 @@ public class Cart {
 	@Transient
 	private double totalOrderPrice;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public UserDtls getUser() {
-		return user;
-	}
-
-	public void setUser(UserDtls user) {
-		this.user = user;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public double getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-
-	public double getTotalOrderPrice() {
-		return totalOrderPrice;
-	}
-
-	public void setTotalOrderPrice(double totalOrderPrice) {
-		this.totalOrderPrice = totalOrderPrice;
-	}
-	
+		
 	
 	
 	
