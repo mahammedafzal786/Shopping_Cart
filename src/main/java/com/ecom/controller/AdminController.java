@@ -88,7 +88,9 @@ public class AdminController {
 	@GetMapping("/category")
 	public String category(Model m) {
 
+		m.addAttribute("category", new Category());
 		m.addAttribute("categorys", categoryService.getAllCategory());
+		
 		return "admin/category";
 	}
 
@@ -100,6 +102,7 @@ public class AdminController {
 		category.setImageName(imageName);
 
 		Boolean existCategory = categoryService.existCategory(category.getName());
+		
 
 		if (existCategory) {
 			session.setAttribute("errorMsg", "Category already exist !");
@@ -142,6 +145,8 @@ public class AdminController {
 
 	@GetMapping("/loadEditCategory/{id}")
 	public String loadEditCategory(@PathVariable int id, Model m) {
+		
+		
 
 		m.addAttribute("category", categoryService.getCategoryById(id));
 

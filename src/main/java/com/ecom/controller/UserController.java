@@ -21,8 +21,6 @@ import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.OrderService;
 import com.ecom.service.UserService;
-import com.ecom.util.OrderStatus;
-
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -105,8 +103,19 @@ public class UserController {
 	}
 	
 	@GetMapping("/orders")
-	public String orderPage() {
+	public String orderPage(Principal p, Model m) {
 		
+		UserDtls user = getLoggedInUserDetails(p);
+
+		List<Cart> carts = cartService.getCartsByUser(user.getId());
+		m.addAttribute("carts", carts);
+		if (carts.size() > 0) {
+
+			double orderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+			double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice() + 250 + 100;
+			m.addAttribute("totalOrderPrice", totalOrderPrice);
+			m.addAttribute("orderPrice", orderPrice);
+		}
 		
 		return "/user/order";
 	}
@@ -121,6 +130,11 @@ public class UserController {
 		
 		orderService.saveOrder(user.getId(), request);
 		
+		return "redirect:/user/success";
+	}
+	
+	@GetMapping("/success")
+	public String loadSuccess() {
 		return "/user/success";
 	}
 	
